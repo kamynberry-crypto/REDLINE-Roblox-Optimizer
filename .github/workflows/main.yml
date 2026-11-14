@@ -1,16 +1,17 @@
-name: Build Windows EXE
+
+name: Build REDLINE V4
 
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout
+      - name: Download project
         uses: actions/checkout@v4
 
       - name: Install .NET
@@ -18,11 +19,27 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Build REDLINE
-        run: dotnet publish RedlineRobloxOptimizer.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true
+      - name: Find and build project
+        shell: pwsh
+        run: |
+          $project = Get-ChildItem -Path . -Recurse -Filter *.csproj |
+            Select-Object -First 1
 
-      - name: Upload EXE
+          if (-not $project) {
+            throw "No C# project file found."
+          }
+
+          dotnet publish $project.FullName `
+            -c Release `
+            -r win-x64 `
+            --self-contained true `
+            -p:PublishSingleFile=true `
+            -p:IncludeNativeLibrariesForSelfExtract=true `
+            -o publish
+
+      - name: Upload REDLINE artifact
         uses: actions/upload-artifact@v4
         with:
-          name: REDLINE-Windows
-          path: bin/Release/net8.0-windows/win-x64/publish/RedlineRobloxOptimizer.exe
+          name: REDLINE-V4-Windows
+          path: publish/
+          if-no-files-found: error
