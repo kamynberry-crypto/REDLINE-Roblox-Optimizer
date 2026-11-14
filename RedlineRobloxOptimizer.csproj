@@ -5,7 +5,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyName>RedlineRobloxOptimizer</AssemblyName>
+    <AssemblyName>REDLINE</AssemblyName>
     <RootNamespace>RedlineRobloxOptimizer</RootNamespace>
   </PropertyGroup>
 </Project>

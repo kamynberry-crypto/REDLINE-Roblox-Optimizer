@@ -1,35 +1,21 @@
-# REDLINE — Roblox Optimizer
+# REDLINE V3 — Roblox Performance Center
 
-A small Windows desktop utility built with C# and .NET 8 (no Python runtime).
+Windows 10/11 utility written in C#/.NET 8. No Python runtime required.
 
-## Included
-- Live CPU usage and system memory usage
-- Roblox Player detection
-- Quick Boost: temporarily sets a running Roblox Player process to `AboveNormal` priority
-- Opens Windows Game Mode settings
-- Launches Roblox using the installed Roblox protocol handler
-- Connection check to Cloudflare DNS (`1.1.1.1`)
+## New NVIDIA telemetry
+- Reads GPU name, utilization, VRAM used/total, temperature and driver version using the NVIDIA `nvidia-smi` command-line utility.
+- If `nvidia-smi` is unavailable, the NVIDIA cards show NOT FOUND. Install/update the official NVIDIA driver and reboot; some driver packages may not expose the utility in PATH.
+- This is overall GPU telemetry, not per-Roblox GPU utilization.
 
-## Important limitations
-- No tool can guarantee higher FPS or lower ping.
-- The connection check is not a Roblox game-server ping test.
-- Ping is mostly affected by your ISP, Wi-Fi/Ethernet, routing, distance, and the Roblox server.
-- Quick Boost is temporary and resets when Roblox closes. It may not help on every PC.
-- This app does not modify Roblox files, disable security, change registry settings, or close your apps.
+## Other features
+- Live system CPU and RAM usage
+- Roblox Player detection, process CPU and memory monitoring
+- Temporary process priority boost and restore button
+- 15-sample connection test to 1.1.1.1 with average, variation and packet loss estimate
+- Shortcuts to Windows Game Mode, Graphics, Power, Network settings and Task Manager
 
-## Build the EXE on GitHub (easy route)
-1. Create a new GitHub repository.
-2. Upload all files from this project ZIP, keeping the `.github/workflows` folder.
-3. Open the repository's **Actions** tab.
-4. Select **Build Windows EXE** and click **Run workflow** (or push a commit).
-5. When the run finishes, open it and download the artifact named **Redline-Roblox-Optimizer-Windows**.
-6. Extract the artifact ZIP. It contains `RedlineRobloxOptimizer.exe`.
+## Build
+Upload the project contents to GitHub, preserving `.github/workflows/build-windows.yml`. Open Actions, choose **Build REDLINE Windows EXE**, run it, then download the `REDLINE-v3-Windows` artifact.
 
-The workflow creates a self-contained Windows x64 executable. The target PC does not need Python or a separate .NET install.
-
-## Build locally (optional)
-Install the .NET 8 SDK on Windows, open a terminal in this folder, then run:
-
-```powershell
-dotnet publish RedlineRobloxOptimizer.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true
-```
+## Limits
+No optimizer can guarantee higher FPS. This version does not change Roblox files, disable security, kill background processes, or make risky registry changes. The ping test is not a Roblox server ping. NVIDIA readings are system-wide.
