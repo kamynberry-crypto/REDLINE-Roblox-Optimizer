@@ -41,9 +41,9 @@ internal sealed class MainForm : Form
     {
         Text = "REDLINE | Roblox Performance Center";
         StartPosition = FormStartPosition.CenterScreen;
-        Size = new Size(920, 790);
-        MinimumSize = new Size(920, 790);
-        MaximumSize = new Size(920, 790);
+        Size = new Size(920, 870);
+        MinimumSize = new Size(920, 870);
+        MaximumSize = new Size(920, 870);
         BackColor = Back;
         ForeColor = Color.White;
         Font = new Font("Segoe UI", 9.5F);
@@ -83,7 +83,14 @@ internal sealed class MainForm : Form
         AddButton(actions, "TASK MANAGER", 635, 119, 205, () => Process.Start(new ProcessStartInfo("taskmgr.exe") { UseShellExecute = true }));
         Controls.Add(actions);
 
-        var tips = new Panel { Location = new Point(22, 582), Size = new Size(860, 105), BackColor = Panel };
+        var profile = new Panel { Location = new Point(22, 582), Size = new Size(860, 100), BackColor = Panel };
+        profile.Controls.Add(SectionTitle("YOUR HARDWARE PROFILE", 18, 12));
+        profile.Controls.Add(new Label { Text = "GTX 1660 Ti  |  Ryzen 5 3600  |  16 GB DDR4", ForeColor = Color.White, Font = new Font("Segoe UI", 10, FontStyle.Bold), AutoSize = true, Location = new Point(20, 43) });
+        profile.Controls.Add(new Label { Text = "Suggested starting point: Roblox graphics Manual, quality 3–5; Windows Graphics preference = High performance for Roblox.", ForeColor = Color.Gainsboro, Font = new Font("Segoe UI", 8.5F), AutoSize = true, Location = new Point(20, 68) });
+        AddButton(profile, "NVIDIA CONTROL PANEL", 635, 25, 205, OpenNvidiaPanel);
+        Controls.Add(profile);
+
+        var tips = new Panel { Location = new Point(22, 694), Size = new Size(860, 105), BackColor = Panel };
         tips.Controls.Add(SectionTitle("QUICK CHECKLIST", 18, 12));
         tips.Controls.Add(new Label
         {
@@ -96,7 +103,7 @@ internal sealed class MainForm : Form
 
         status.Text = "Ready. REDLINE monitors and adjusts only Roblox process priority; it does not alter game files.";
         status.ForeColor = Color.Gainsboro;
-        status.Location = new Point(24, 700);
+        status.Location = new Point(24, 812);
         status.Size = new Size(850, 30);
         Controls.Add(status);
 
@@ -104,7 +111,7 @@ internal sealed class MainForm : Form
         {
             Text = "Ping test uses Cloudflare DNS (1.1.1.1), not the Roblox game server. No optimizer can guarantee higher FPS or lower ping.",
             ForeColor = Color.FromArgb(155, 155, 165), Font = new Font("Segoe UI", 8.2F),
-            Location = new Point(24, 732), Size = new Size(850, 24)
+            Location = new Point(24, 840), Size = new Size(850, 24)
         };
         Controls.Add(note);
 
@@ -264,6 +271,25 @@ internal sealed class MainForm : Form
             ping.Text = "FAILED";
             status.Text = "Connection test failed. Try again or check your network.";
         }
+    }
+
+
+    private void OpenNvidiaPanel()
+    {
+        string[] candidates =
+        {
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "NVIDIA Corporation", "Control Panel Client", "nvcplui.exe"),
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "NVIDIA Corporation", "Control Panel Client", "nvcplui.exe")
+        };
+        var exe = candidates.FirstOrDefault(File.Exists);
+        try
+        {
+            if (exe is not null)
+                Process.Start(new ProcessStartInfo(exe) { UseShellExecute = true });
+            else
+                status.Text = "NVIDIA Control Panel was not found. Install it from Microsoft Store or update NVIDIA drivers.";
+        }
+        catch { status.Text = "Could not open NVIDIA Control Panel."; }
     }
 
     private static void OpenSettings(string uri)

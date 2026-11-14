@@ -16,5 +16,5 @@ jobs:
       - name: Upload REDLINE
         uses: actions/upload-artifact@v4
         with:
-          name: REDLINE-v3-Windows
+          name: REDLINE-v4-Windows
           path: bin/Release/net8.0-windows/win-x64/publish/REDLINE.exe
