@@ -1,0 +1,28 @@
+name: Build Windows EXE
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build REDLINE
+        run: dotnet publish RedlineRobloxOptimizer.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true
+
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: REDLINE-Windows
+          path: bin/Release/net8.0-windows/win-x64/publish/RedlineRobloxOptimizer.exe
